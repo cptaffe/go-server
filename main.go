@@ -22,6 +22,13 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
+	rows, err := db.Query(`SELECT name FROM users WHERE favorite_fruit = $1
+	OR age BETWEEN $2 AND $2 + 3`, "orange", 64)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
 	test := Test{
 		fmt.Sprintf("Hi there, I love %s!", r.URL.Path[1:]),
 	}
